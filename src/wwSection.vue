@@ -1,6 +1,5 @@
 <template>
     <component :is="tag" :class="{ sticky: isSticky }" v-show="show">
-        {{ content.position }} {{ appearScrollPosition }} {{ currentScrollPosition }}
         <wwLayout path="wwObjects" class="navigation-bar"></wwLayout>
     </component>
 </template>
