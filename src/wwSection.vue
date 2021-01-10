@@ -27,11 +27,13 @@ export default {
     },
     data() {
         return {
-            currentScrollPosition: 0,
-            sectionPosition: 0,
+            currentScrollPosition: 0, // current windows scroll
+            sectionPosition: 0, // position of the section with this.sectionId if exists
+            stickyPosition: 0, // scroll when element need to be sticky
         };
     },
     mounted() {
+        // TODO: wrap with requestAnimationFrame // throttle
         window.addEventListener('scroll', this.onScroll);
         window.addEventListener('resize', this.onResize);
         this.onScroll();
@@ -54,7 +56,7 @@ export default {
         isSticky() {
             if (this.position === 'fixed') return true;
             if (this.position === 'sticky') {
-                return false;
+                return this.currentScrollPosition >= this.stickyPosition;
             }
             if (this.position === 'static') return false;
 
@@ -70,6 +72,9 @@ export default {
         },
     },
     methods: {
+        getElementPosition(el) {
+            return el ? Math.max(0, el.offsetTop - window.innerHeight) : 0;
+        },
         setSectionPosition() {
             if (!this.content.sectionId) {
                 this.sectionPosition = 0;
@@ -77,10 +82,21 @@ export default {
             }
             const document = wwLib.getFrontDocument();
             const section = document.querySelector(`[data-section-uid="${this.content.sectionId}"]`);
-            this.sectionPosition = section ? Math.max(0, section.offsetTop - window.innerHeight) : 0;
+            this.sectionPosition = this.getElementPosition(section);
+        },
+        setStickyPosition() {
+            if (!this.$parent) {
+                this.stickyPosition = 0;
+                return;
+            }
+            const { top } = this.$parent.$el.getBoundingClientRect();
+            const document = wwLib.getFrontDocument();
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            this.stickyPosition = top + scrollTop;
         },
         onResize() {
             this.setSectionPosition();
+            this.setStickyPosition();
         },
         onScroll() {
             this.currentScrollPosition = window.scrollY;
