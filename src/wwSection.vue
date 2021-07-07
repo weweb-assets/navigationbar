@@ -1,5 +1,5 @@
 <template>
-    <component :is="tag" :class="{ sticky: isSticky }" v-show="show">
+    <component :is="tag" v-show="show" :class="{ sticky: isSticky }">
         <wwLayout path="wwObjects" class="navigation-bar"></wwLayout>
     </component>
 </template>
@@ -8,11 +8,10 @@
 import { getConfiguration } from './configuration';
 
 export default {
-    name: '__COMPONENT_NAME__',
     props: {
-        content: Object,
+        content: { type: Object, required: true },
         /* wwManager: start */
-        wwEditorState: Object,
+        wwEditorState: { type: Object, required: true },
         /* wwManager: end */
     },
     wwDefaultContent: {
@@ -31,13 +30,6 @@ export default {
             sectionPosition: 0, // position of the section with this.sectionId if exists
             stickyPosition: 0, // scroll when element need to be sticky
         };
-    },
-    mounted() {
-        // TODO: wrap with requestAnimationFrame // throttle
-        window.addEventListener('scroll', this.onScroll);
-        window.addEventListener('resize', this.onResize);
-        this.onScroll();
-        this.onResize();
     },
     computed: {
         tag() {
@@ -71,6 +63,22 @@ export default {
             return this.appearScrollPosition <= this.currentScrollPosition;
         },
     },
+    watch: {
+        'content.sectionId'() {
+            this.setSectionPosition();
+        },
+    },
+    mounted() {
+        // TODO: wrap with requestAnimationFrame // throttle
+        window.addEventListener('scroll', this.onScroll);
+        window.addEventListener('resize', this.onResize);
+        this.onScroll();
+        this.onResize();
+    },
+    unmounted() {
+        window.removeEventListener('scroll', this.onScroll);
+        window.removeEventListener('resize', this.onResize);
+    },
     methods: {
         getElementPosition(el) {
             return el ? Math.max(0, el.offsetTop - window.innerHeight) : 0;
@@ -100,15 +108,6 @@ export default {
         },
         onScroll() {
             this.currentScrollPosition = window.scrollY;
-        },
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.onScroll);
-        window.removeEventListener('resize', this.onResize);
-    },
-    watch: {
-        'content.sectionId'() {
-            this.setSectionPosition();
         },
     },
 };
