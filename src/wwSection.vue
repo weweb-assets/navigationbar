@@ -10,9 +10,9 @@ import { getConfiguration } from './configuration';
 export default {
     props: {
         content: { type: Object, required: true },
-        /* wwManager: start */
+        /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
-        /* wwManager: end */
+        /* wwEditor:end */
     },
     wwDefaultContent: {
         wwObjects: [],
@@ -36,14 +36,15 @@ export default {
             return this.content.tag || 'div';
         },
         position() {
-            /* wwManager: start */
+            /* wwEditor:start */
             return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION
                 ? 'static'
                 : this.content.position;
-            /* wwManager: end */
-
+            /* wwEditor:end */
+            /* wwFront:start */
             // eslint-disable-next-line no-unreachable
             return this.content.position;
+            /* wwFront:end */
         },
         isSticky() {
             if (this.position === 'fixed') return true;
