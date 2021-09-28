@@ -5,24 +5,12 @@
 </template>
 
 <script>
-import { getConfiguration } from './configuration';
-
 export default {
     props: {
         content: { type: Object, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
-    },
-    wwDefaultContent: {
-        wwObjects: [],
-        position: 'static',
-        apparition: 'position',
-        scrollPosition: 0,
-        sectionId: null,
-    },
-    wwEditorConfiguration({ content }) {
-        return getConfiguration(content);
     },
     data() {
         return {
