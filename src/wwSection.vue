@@ -130,7 +130,7 @@ export default {
     }
 
         
-    & .slide-top { 
+    &.slide-top { 
         transition: transform 0.5s ease;
         transform: translateY(-100%);
 
@@ -139,7 +139,7 @@ export default {
         }
     }
 
-    & .sticky {
+    &.sticky {
         position: fixed;
         top: 0;
         z-index: 10;
