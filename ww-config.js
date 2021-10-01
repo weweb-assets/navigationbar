@@ -34,14 +34,26 @@ export default {
         apparition: {
             label: { en: 'Apparition', fr: 'Apparition' },
             type: 'TextSelect',
-            options: content => ({
+            hidden: content => content.position !== 'fixed',
+            options: {
                 options: [
                     { value: 'position', label: { en: 'At a specific position', fr: 'Position spécifique' } },
                     { value: 'section', label: { en: 'At a specific section', fr: 'Fix' } },
                 ],
-                disabled: content.position !== 'fixed',
-            }),
+            },
             defaultValue: 'position',
+        },
+        animation: {
+            label: { en: 'Animation', fr: 'Animation' },
+            type: 'TextSelect',
+            hidden: content => content.position !== 'fixed',
+            options: {
+                options: [
+                    { value: 'none', default: true, label: { en: 'Appear' } },
+                    { value: 'slide-top', label: { en: 'Slide from top' } },
+                ],
+            },
+            defaultValue: 'none',
         },
         scrollPosition: {
             label: { en: 'Appear after scrolling' },

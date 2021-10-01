@@ -1,6 +1,6 @@
 <template>
-    <component :is="tag" v-show="show" :class="{ sticky: isSticky }">
-        <wwLayout path="wwObjects" class="navigation-bar"></wwLayout>
+    <component :is="tag" class="navigation-bar" :class="{ [content.animation]: true, 'show': show, sticky: isSticky }">
+        <wwLayout path="wwObjects" class="content"></wwLayout>
     </component>
 </template>
 
@@ -42,6 +42,17 @@ export default {
             if (this.position === 'static') return false;
 
             return false;
+        },
+        isFixed(){
+            /* wwEditor:start */
+            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION
+                ? false
+                : this.position === 'fixed';
+            /* wwEditor:end */
+            /* wwFront:start */
+            // eslint-disable-next-line no-unreachable
+            return this.position === 'fixed';
+            /* wwFront:end */
         },
         appearScrollPosition() {
             if (this.position !== 'fixed') return 0;
@@ -103,14 +114,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sticky {
-    position: fixed;
-    top: 0;
-    z-index: 10;
-}
 .navigation-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    opacity: 0;
+    pointer-events: none;
+
+    & .content {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    &.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+        
+    & .slide-top { 
+        transition: transform 0.5s ease;
+        transform: translateY(-100%);
+
+        &.show {
+            transform: translateY(0);
+        }
+    }
+
+    & .sticky {
+        position: fixed;
+        top: 0;
+        z-index: 10;
+        transition: 0.5s ease;
+    }
 }
+
 </style>
