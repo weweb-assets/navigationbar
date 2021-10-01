@@ -43,17 +43,6 @@ export default {
 
             return false;
         },
-        isFixed(){
-            /* wwEditor:start */
-            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION
-                ? false
-                : this.position === 'fixed';
-            /* wwEditor:end */
-            /* wwFront:start */
-            // eslint-disable-next-line no-unreachable
-            return this.position === 'fixed';
-            /* wwFront:end */
-        },
         appearScrollPosition() {
             if (this.position !== 'fixed') return 0;
             if (this.content.apparition === 'position') return this.content.scrollPosition;
